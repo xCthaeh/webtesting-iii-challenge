@@ -1,55 +1,24 @@
 // Test away
 import React from "react";
 import renderer from "react-test-renderer";
-import { render, fireEvent, cleanup } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import Dashboard from "./Dashboard";
+import "@testing-library/react/cleanup-after-each";
 
-describe("<Display />", () => {
-    
+describe("<Dashboard />", () => {
   it("should match snapshot", () => {
-    const tree = renderer.create(<Display />).toJSON();
+    const tree = renderer.create(<Dashboard />).toJSON();
+
     expect(tree).toMatchSnapshot();
   });
-
   it("should render", () => {
-    render(<Display closed="true" locked="true" />);
+    render(<Dashboard />);
   });
-
-  it("should default to unlocked", () => {
-    const { getByText } = render(<Display />);
+  it("should show controls and display", () => {
+    const { getByText } = render(<Dashboard />);
     getByText(/unlocked/i);
-  });
-
-  it("should default to open", () => {
-    const { getByText } = render(<Display />);
     getByText(/open/i);
+    getByText(/lock gate/i);
+    getByText(/close gate/i);
   });
-
-  it("should be locked", () => {
-    const { getByText } = render(<Display closed={true} locked={true} />);
-    getByText(/locked/i);
-  });
-
-  it("should be closed", () => {
-    const { getByText } = render(<Display closed={true} locked={true} />);
-    getByText(/closed/i);
-  });
-
-  it("should be unlocked", () => {
-    const { getByText } = render(<Display closed={false} locked={false} />);
-    getByText(/unlocked/i);
-  });
-
-  it("should be green-led", () => {
-    const { getByText } = render(<Display closed={false} locked={false} />);
-    expect(getByText(/open/i).classList[1]).toEqual("green-led");
-    expect(getByText(/unlocked/i).classList[1]).toEqual("green-led");
-  });
-
-  it("should be red-led", () => {
-    const { getByText } = render(<Display closed={true} locked={true} />);
-    expect(getByText(/closed/i).classList[1]).toEqual("red-led");
-    expect(getByText(/locked/i).classList[1]).toEqual("red-led");
-  });
-
 });
